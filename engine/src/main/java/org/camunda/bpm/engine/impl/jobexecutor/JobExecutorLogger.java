@@ -217,46 +217,52 @@ public class JobExecutorLogger extends ProcessEngineLogger {
     return new ProcessEngineException(exceptionMessage("031", "Invalid configuration for job executor priority range. Reason: {}", reason));
   }
 
-  public void failedAcquisitions(String processEngine, AcquiredJobs acquiredJobs) {
+  public void failedAcquisitionLocks(String processEngine, AcquiredJobs acquiredJobs) {
     logDebug(
             "033",
-            "No of Jobs failed to Lock during Acquisition of jobs for the process engine '{}' : {}", processEngine, acquiredJobs.getNumberOfJobsFailedToLock());
+            "Jobs failed to Lock during Acquisition of jobs for the process engine '{}' : {}", processEngine, acquiredJobs.getNumberOfJobsFailedToLock());
   }
 
   public void jobsToAcquire(String processEngine, int numJobsToAcquire) {
     logDebug(
             "034",
-            "Attempting to acquire {} jobs for the process engine '{}' : {}", numJobsToAcquire , processEngine);
+            "Attempting to acquire {} jobs for the process engine '{}'", numJobsToAcquire , processEngine);
   }
 
   public void rejectedJobExecutions(String processEngine, int numJobsRejected) {
     logDebug(
             "035",
-            "No of Jobs execution rejections for the process engine '{}' : {}", processEngine, numJobsRejected);
+            "Jobs execution rejections for the process engine '{}' : {}", processEngine, numJobsRejected);
   }
 
   public void availableJobExecutionThreads(String processEngine, int numAvailableThreads) {
     logDebug(
             "036",
-            "No of available job execution threads for the process engine '{}' : {}", processEngine, numAvailableThreads);
+            "Available job execution threads for the process engine '{}' : {}", processEngine, numAvailableThreads);
   }
 
   public void currentJobExecutions(String processEngine, int numExecutions) {
     logDebug(
             "037",
-            "No of Jobs currently in execution for the process engine '{}' : {}", processEngine, numExecutions);
+            "Jobs currently in execution for the process engine '{}' : {}", processEngine, numExecutions);
   }
 
   public void numJobsInQueue(String processEngine, int numJobsInQueue, int maxQueueSize) {
     logDebug(
             "038",
-            "No of Jobs currently in queue to be executed for the process engine '{}' is {} out of the max queue size : {}", processEngine, numJobsInQueue, maxQueueSize);
+            "Jobs currently in queue to be executed for the process engine '{}' is {} out of the max queue size : {}", processEngine, numJobsInQueue, maxQueueSize);
   }
 
   public void availableThreadsCalculationError() {
     logWarn(
             "039",
             "Arithmetic exception occurred while computing remaining available thread count for logging.");
+  }
+
+  public void totalQueueCapacityCalculationError() {
+    logWarn(
+            "040",
+            "Arithmetic exception occurred while computing total queue capacity for logging.");
   }
 
 }
