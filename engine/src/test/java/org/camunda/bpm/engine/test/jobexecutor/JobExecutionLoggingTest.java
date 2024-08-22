@@ -79,7 +79,7 @@ public class JobExecutionLoggingTest {
     processEngineConfiguration.getJobExecutor().shutdown();
 
     // look for filled queue logs
-    List<ILoggingEvent> filteredLogList = loggingRule.getFilteredLog("Jobs currently in queue to be executed for the process engine 'default' is 2 out of the max queue size : 2");
+    List<ILoggingEvent> filteredLogList = loggingRule.getFilteredLog("Jobs currently in queue to be executed for the process engine 'default' are 2 out of the max queue size : 2");
 
     // then 3 instances of filled queue logs will be available as there is 2 additional threads possible to reach max-pool-size
     assertThat(filteredLogList.size()).isEqualTo(3);
