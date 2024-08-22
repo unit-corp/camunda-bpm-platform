@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.camunda.bpm.container.impl.jmx.services.JmxManagedThreadPool;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.ProcessEngineLogger;
 import org.camunda.bpm.engine.impl.interceptor.Command;
@@ -136,6 +135,7 @@ public abstract class JobExecutor {
   protected abstract void startExecutingJobs();
   protected abstract void stopExecutingJobs();
   public abstract void executeJobs(List<String> jobIds, ProcessEngineImpl processEngine);
+  //ManagedJobExecutor
 
   /**
    * Deprecated: use {@link #executeJobs(List, ProcessEngineImpl)} instead
@@ -184,17 +184,18 @@ public abstract class JobExecutor {
   }
 
   public void logJobExecutionInfo(ProcessEngineImpl engine, int executionQueueSize, int executionQueueCapacity, int maxExecutionThreads, int activeExecutionThreads) {
-    if(engine != null){
+    if (engine != null) {
       LOG.numJobsInQueue(engine.getName(), executionQueueSize, executionQueueCapacity);
       LOG.currentJobExecutions(engine.getName(), activeExecutionThreads);
       try {
         LOG.availableJobExecutionThreads(engine.getName(),
-                Math.subtractExact(maxExecutionThreads, activeExecutionThreads));
-      } catch (ArithmeticException arithmeticException){
-        //arithmetic exception occurred while computing remaining available thread count for logging.
+            Math.subtractExact(maxExecutionThreads, activeExecutionThreads));
+      } catch (ArithmeticException arithmeticException) {
+        // arithmetic exception occurred while computing remaining available
+        // thread count for logging.
         LOG.availableThreadsCalculationError();
       }
-      }
+    }
   }
 
   public int calculateTotalQueueCapacity(int availableItems, int remainingCapacity) {
