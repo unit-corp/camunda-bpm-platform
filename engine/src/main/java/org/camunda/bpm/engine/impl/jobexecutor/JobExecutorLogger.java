@@ -226,7 +226,7 @@ public class JobExecutorLogger extends ProcessEngineLogger {
   }
 
   public void jobsToAcquire(String processEngine, int numJobsToAcquire) {
-    logDebug("034", "Attempting to acquire {} jobs for the process engine '{}'",numJobsToAcquire, processEngine);
+    logDebug("034", "Attempting to acquire {} jobs for the process engine '{}'", numJobsToAcquire, processEngine);
   }
 
   public void rejectedJobExecutions(String processEngine, int numJobsRejected) {
@@ -244,7 +244,7 @@ public class JobExecutorLogger extends ProcessEngineLogger {
 
   public void numJobsInQueue(String processEngine, int numJobsInQueue, int maxQueueSize) {
     logDebug("038",
-        "Jobs currently in queue to be executed for the process engine '{}' are {} out of the max queue size : {}",
+        "Jobs currently in queue to be executed for the process engine '{}': {} (out of the max queue size : {})",
         processEngine, numJobsInQueue, maxQueueSize);
   }
 

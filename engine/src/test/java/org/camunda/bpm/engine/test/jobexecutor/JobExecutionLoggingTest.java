@@ -1,27 +1,29 @@
 package org.camunda.bpm.engine.test.jobexecutor;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import org.camunda.bpm.engine.ManagementService;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.jobexecutor.CallerRunsRejectedJobsHandler;
 import org.camunda.bpm.engine.impl.jobexecutor.DefaultJobExecutor;
-import org.camunda.bpm.engine.runtime.Job;
 import org.camunda.bpm.engine.test.Deployment;
 import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
 import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.camunda.commons.testing.ProcessEngineLoggingRule;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
-import java.util.List;
-import java.util.concurrent.*;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.spi.ILoggingEvent;
 
 public class JobExecutionLoggingTest {
 
@@ -33,30 +35,12 @@ public class JobExecutionLoggingTest {
   public RuleChain ruleChain = RuleChain.outerRule(engineRule).around(testRule).around(loggingRule);
 
   private RuntimeService runtimeService;
-  private ManagementService managementService;
   private ProcessEngineConfigurationImpl processEngineConfiguration;
 
   @Before
   public void init() {
     runtimeService = engineRule.getRuntimeService();
     processEngineConfiguration = engineRule.getProcessEngineConfiguration();
-    managementService = engineRule.getProcessEngine().getManagementService();
-  }
-
-  @After
-  public void tearDown() {
-    List<Job> simpleAsyncProcessJobs = managementService.createJobQuery().processDefinitionKey("simpleAsyncProcess").list();
-    List<Job> testProcessJobs = managementService.createJobQuery().processDefinitionKey("testProcess").list();
-
-    // remove simple async process jobs
-    for (Job job : simpleAsyncProcessJobs) {
-      managementService.deleteJob(job.getId());
-    }
-
-    // remove test process jobs
-    for (Job job : testProcessJobs) {
-      managementService.deleteJob(job.getId());
-    }
   }
 
   @Test
@@ -79,7 +63,7 @@ public class JobExecutionLoggingTest {
     processEngineConfiguration.getJobExecutor().shutdown();
 
     // look for filled queue logs
-    List<ILoggingEvent> filteredLogList = loggingRule.getFilteredLog("Jobs currently in queue to be executed for the process engine 'default' are 2 out of the max queue size : 2");
+    List<ILoggingEvent> filteredLogList = loggingRule.getFilteredLog("Jobs currently in queue to be executed for the process engine 'default': 2 (out of the max queue size : 2)");
 
     // then 3 instances of filled queue logs will be available as there is 2 additional threads possible to reach max-pool-size
     assertThat(filteredLogList.size()).isEqualTo(3);
