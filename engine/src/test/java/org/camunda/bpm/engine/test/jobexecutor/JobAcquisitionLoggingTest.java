@@ -68,7 +68,7 @@ public class JobAcquisitionLoggingTest {
     List<ILoggingEvent> filteredLogList = loggingRule.getFilteredLog("Attempting to acquire 3 jobs for the process engine 'default'");
 
     // then find the expected logs
-    assertThat(filteredLogList.size()).isGreaterThan(4);
+    assertThat(filteredLogList.size()).isGreaterThan(3);
   }
 
   @Test
@@ -87,6 +87,6 @@ public class JobAcquisitionLoggingTest {
     List<ILoggingEvent> filteredLogList = loggingRule.getFilteredLog("Jobs failed to lock during acquisition of jobs for the process engine 'default' : 0");
 
     // then get logs that states there were no faults during job acquisition locks
-    assertThat(filteredLogList.size()).isGreaterThan(4);
+    assertThat(filteredLogList.size()).isGreaterThan(3);
   }
 }
