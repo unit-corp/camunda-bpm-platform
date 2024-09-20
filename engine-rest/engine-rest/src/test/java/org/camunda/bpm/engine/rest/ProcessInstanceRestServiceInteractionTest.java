@@ -874,6 +874,8 @@ public class ProcessInstanceRestServiceInteractionTest extends AbstractRestServi
         .statusCode(Status.NO_CONTENT.getStatusCode())
         .when()
         .delete(SINGLE_PROCESS_INSTANCE_SINGLE_COMMENT_URL);
+
+    verify(taskServiceMock).deleteProcessInstanceComment(EXAMPLE_PROCESS_INSTANCE_ID, EXAMPLE_PROCESS_INSTANCE_COMMENT_ID);
   }
 
   @Test
@@ -902,11 +904,8 @@ public class ProcessInstanceRestServiceInteractionTest extends AbstractRestServi
         .header("accept", MediaType.APPLICATION_JSON)
         .then()
         .expect()
-        .statusCode(Status.NOT_FOUND.getStatusCode())
+        .statusCode(Status.BAD_REQUEST.getStatusCode())
         .contentType(ContentType.JSON)
-        .body(containsString(
-            "Deletion is not possible. No comment exists for processInstanceId '" + EXAMPLE_PROCESS_INSTANCE_ID
-                + "' and comment id '" + NON_EXISTING_ID + "'."))
         .when()
         .delete(SINGLE_PROCESS_INSTANCE_SINGLE_COMMENT_URL);
   }
@@ -986,6 +985,8 @@ public class ProcessInstanceRestServiceInteractionTest extends AbstractRestServi
         .statusCode(Status.NO_CONTENT.getStatusCode())
         .when()
         .delete(PROCESS_INSTANCE_COMMENTS_URL);
+
+    verify(taskServiceMock).deleteProcessInstanceComments(EXAMPLE_PROCESS_INSTANCE_ID);
   }
 
   @Test

@@ -3751,6 +3751,7 @@ public class TaskRestServiceInteractionTest extends
         .statusCode(Status.NO_CONTENT.getStatusCode())
         .when()
         .delete(SINGLE_TASK_SINGLE_COMMENT_URL);
+    verify(taskServiceMock).deleteTaskComment(EXAMPLE_TASK_ID, EXAMPLE_TASK_COMMENT_ID  );
   }
 
   @Test
@@ -3777,11 +3778,8 @@ public class TaskRestServiceInteractionTest extends
         .header("accept", MediaType.APPLICATION_JSON)
         .then()
         .expect()
-        .statusCode(Status.NOT_FOUND.getStatusCode())
+        .statusCode(Status.BAD_REQUEST.getStatusCode())
         .contentType(ContentType.JSON)
-        .body(containsString(
-            "Deletion is not possible. No comment exists for task id '" + EXAMPLE_TASK_ID + "' and comment id '"
-                + NON_EXISTING_ID + "'."))
         .when()
         .delete(SINGLE_TASK_SINGLE_COMMENT_URL);
   }
@@ -3855,6 +3853,7 @@ public class TaskRestServiceInteractionTest extends
         .statusCode(Status.NO_CONTENT.getStatusCode())
         .when()
         .delete(SINGLE_TASK_COMMENTS_URL);
+    verify(taskServiceMock).deleteTaskComments(EXAMPLE_TASK_ID);
   }
 
   @Test
